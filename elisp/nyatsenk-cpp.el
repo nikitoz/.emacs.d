@@ -26,6 +26,7 @@
   (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
   (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
   (rtags-enable-standard-keybindings)
+  (setq rtags-display-result-backend 'helm)
   (define-key global-map (kbd "C-M-g") 'rtags-find-references-at-point))
 
 (provide 'nyatsenk-cpp)

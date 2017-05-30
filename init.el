@@ -83,6 +83,8 @@
      "Window '%s' is normal")
    (current-buffer)))
 (global-set-key [pause] 'toggle-window-dedicated)
+
+(semantic-mode)
 ;------------------------------------------------------------------------------
 ; solarized
 ;------------------------------------------------------------------------------
@@ -90,12 +92,12 @@
 ;------------------------------------------------------------------------------
 ; Helm
 ;------------------------------------------------------------------------------
-;(use-package helm :ensure t)
+(use-package helm)
 (use-package rainbow-delimiters
   :config
   (add-hook 'c-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'c++-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode 'rainbow-delimiters-mode))
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 ;------------------------------------------------------------------------------
 ; Tabs for documents - extremely handy
 ;------------------------------------------------------------------------------
@@ -186,6 +188,7 @@
 (use-package projectile
   :config
   (projectile-global-mode)
+  (setq projectile-indexing-method 'alien)
   (define-key global-map (kbd "<f7>") 'projectile-compile-project)
   (define-key global-map (kbd "<f5>") 'projectile-run-project)
   (define-key global-map (kbd "<f6>") 'projectile-test-project))
