@@ -172,7 +172,7 @@
 (use-package ycmd
   :config
   (add-hook 'after-init-hook #'global-ycmd-mode)
-  (set-variable 'ycmd-server-command '("python3" "/home/nyatsenk/hub/ycmd/ycmd"))
+  (set-variable 'ycmd-server-command '("python" "/home/nyatsenk/hub/ycmd/ycmd"))
   (set-variable 'ycmd-extra-conf-whitelist '("~/*"))
   (define-key ycmd-mode-map ycmd-keymap-prefix nil)
   (setq ycmd-keymap-prefix (kbd "C-c y"))

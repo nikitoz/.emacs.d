@@ -19,6 +19,7 @@
     ("\\.ixx\\'" (".cxx" ".hxx"))
     ("\\.hxx\\'" (".ixx" ".cxx"))
     ))
+
 (setq-default ff-other-file-alist 'my-cpp-other-file-alist)
 
 (use-package rtags
@@ -27,6 +28,20 @@
   (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
   (rtags-enable-standard-keybindings)
   (setq rtags-display-result-backend 'helm)
-  (define-key global-map (kbd "C-M-g") 'rtags-find-references-at-point))
+  (define-key global-map (kbd "C-M-g") 'rtags-find-references-at-point)
+  (setq rtags-autostart-diagnostics t)
+  (setq rtags-completions-enabled t)
+  (push 'company-rtags company-backends)
+  (define-key c-mode-base-map (kbd "C-q") (function company-complete)))
+
+(use-package modern-cpp-font-lock
+  :ensure t
+  :config
+  (modern-c++-font-lock-global-mode t))
+
+(use-package cmake-ide
+  :ensure t
+  :config
+  (cmake-ide-setup))
 
 (provide 'nyatsenk-cpp)
