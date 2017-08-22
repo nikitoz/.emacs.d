@@ -188,7 +188,6 @@
 (use-package projectile
   :config
   (projectile-global-mode)
-  (setq projectile-indexing-method 'alien)
   (define-key global-map (kbd "<f7>") 'projectile-compile-project)
   (define-key global-map (kbd "<f5>") 'projectile-run-project)
   (define-key global-map (kbd "<f6>") 'projectile-test-project))
