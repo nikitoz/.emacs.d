@@ -92,10 +92,25 @@
 ; solarized
 ;------------------------------------------------------------------------------
 (load-theme 'sanityinc-solarized-light)
+
+(use-package projectile
+  :config
+  (projectile-global-mode)
+  (define-key global-map (kbd "<f7>") 'projectile-compile-project)
+  (define-key global-map (kbd "<f5>") 'projectile-run-project)
+  (define-key global-map (kbd "<f6>") 'projectile-test-project))
 ;------------------------------------------------------------------------------
 ; Helm
 ;------------------------------------------------------------------------------
 (use-package helm)
+(use-package helm-ag)
+(use-package helm-projectile
+  :config
+  (helm-projectile-on)
+  (define-key projectile-mode-map (kbd "C-c C-g") 'helm-projectile-ag)
+  (define-key projectile-mode-map (kbd "C-c C-f") 'helm-projectile-find-file)
+  (define-key projectile-mode-map (kbd "C-c C-o") 'helm-projectile-find-other-file))
+
 (use-package rainbow-delimiters
   :config
   (add-hook 'c-mode-hook 'rainbow-delimiters-mode)
@@ -123,6 +138,10 @@
   (setq ido-enable-flex-matching t)
   (setq ido-use-faces nil))
 
+(use-package ido-completing-read+
+  :config
+  (ido-ubiquitous-mode 1))
+
 ;------------------------------------------------------------------------------
 ; Set highlight
 ;------------------------------------------------------------------------------
@@ -138,8 +157,8 @@
 (use-package auto-highlight-symbol
   :config
   (global-auto-highlight-symbol-mode t)
-  (set-face-attribute 'ahs-plugin-defalt-face nil :background "#657b83")
-  (set-face-attribute 'ahs-plugin-defalt-face nil :foreground "GhostWhite")
+;;  (set-face-attribute 'ahs-plugin-default-face nil :background "#657b83")
+;;(set-face-attribute 'ahs-plugin-default-face nil :foreground "GhostWhite")
   (set-face-attribute 'ahs-face nil :background "#657b83")
   (set-face-attribute 'ahs-face nil :foreground "#eee8d5"))
 ;-----------------------------------------------------------------------------
@@ -170,13 +189,6 @@
      `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
      `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
      `(company-tooltip-common ((t (:inherit font-lock-constant-face)))))))
-
-(use-package projectile
-  :config
-  (projectile-global-mode)
-  (define-key global-map (kbd "<f7>") 'projectile-compile-project)
-  (define-key global-map (kbd "<f5>") 'projectile-run-project)
-  (define-key global-map (kbd "<f6>") 'projectile-test-project))
 
 (use-package ws-butler
   :config
