@@ -185,6 +185,8 @@
 (setq custom-file "~/custom.el")
 (load custom-file)
 
+(use-package realgud)
+
 (use-package nyatsenk-cpp :ensure f)
 (use-package nyatsenk-org :ensure f)
 (use-package nyatsenk-py  :ensure f)
