@@ -15,47 +15,27 @@
 (defvar my-cpp-other-file-alist
   '(("\\.cpp\\'" (".h"))
     ("\\.h\\'" (".cpp"))
+    ("\\.hh\\'" (".cc"))
     ("\\.cxx\\'" (".hxx" ".ixx"))
     ("\\.ixx\\'" (".cxx" ".hxx"))
-    ("\\.hxx\\'" (".ixx" ".cxx"))
-    ))
+    ("\\.hxx\\'" (".ixx" ".cxx"))))
 
 (setq-default ff-other-file-alist 'my-cpp-other-file-alist)
-
-(use-package rtags
-  :config
-  (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
-  (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-  (rtags-enable-standard-keybindings)
-  (setq rtags-display-result-backend 'helm)
-  (define-key global-map (kbd "C-M-g") 'rtags-find-references-at-point)
-  (setq rtags-autostart-diagnostics t)
-  (setq rtags-completions-enabled t)
-  (define-key c-mode-base-map (kbd "C-q") (function company-complete)))
-
-(use-package  company-rtags
-  :config
-  (push 'company-rtags company-backends))
 
 (use-package modern-cpp-font-lock
   :ensure t
   :config
   (modern-c++-font-lock-global-mode t))
 
-(use-package ycmd
-  :config
-  (add-hook 'c++-mode-hook 'ycmd-mode)
-  (set-variable 'ycmd-server-command '("python" "/home/nyatsenk/hub/ycmd/ycmd"))
-  (set-variable 'ycmd-extra-conf-whitelist '("~/*"))
-  (define-key ycmd-mode-map ycmd-keymap-prefix nil)
-  (setq ycmd-keymap-prefix (kbd "C-c y"))
-  (define-key ycmd-mode-map ycmd-keymap-prefix ycmd-command-map))
+(defun cquery//enable ()
+  (condition-case nil
+      (lsp-cquery-enable)
+    (user-error nil)))
 
-(use-package company-ycmd
+(use-package cquery
+  :commands lsp-cquery-enable
+  :init (add-hook 'c-mode-common-hook #'cquery//enable)
   :config
-  (company-ycmd-setup)
-  (define-key global-map (kbd "M-,") 'pop-tag-mark)
-  (define-key global-map (kbd "M-.") 'ycmd-goto)
-  (define-key global-map (kbd "C-M-o") 'projectile-find-other-file))
+  (setq cquery-executable "/home/nyatsenk/hub/cquery/build/release/bin/cquery"))
 
 (provide 'nyatsenk-cpp)

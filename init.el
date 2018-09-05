@@ -10,7 +10,7 @@
 ; Source code pro is adobe fonts
 ;------------------------------------------------------------------------------
 (set-default-font "Source Code Pro Medium")
-(set-face-attribute 'default nil :height 110)
+(set-face-attribute 'default nil :height 140)
 ;------------------------------------------------------------------------------
 ; CUA mode sets ctrl-c/v and that kind of stuff
 ;------------------------------------------------------------------------------
@@ -65,7 +65,7 @@
 (global-set-key [C-f8] 'show-file-name)
 
 (defun copy-for-gdb ()
-  "Copies filename:linenumber to buffer"
+  "Copies 'break filename:linenumber' to buffer"
   (interactive)
   (kill-new (concat "break " (buffer-name) ":" (number-to-string (line-number-at-pos)))))
 (global-set-key [C-f1] 'copy-for-gdb)
@@ -88,22 +88,41 @@
     (lambda ()
     (setq indent-tabs-mode nil)
     (semantic-mode)))
+
+(use-package lua-mode)
+(use-package color-theme-sanityinc-tomorrow)
+(use-package solarized-theme)
+(use-package nord-theme)
 ;------------------------------------------------------------------------------
 ; solarized
 ;------------------------------------------------------------------------------
-(load-theme 'sanityinc-solarized-light)
+(if (display-graphic-p)
+    (progn
+;      (load-theme 'solarized-light t)))
+      (load-theme 'sanityinc-tomorrow-eighties t)))
+
+(use-package magit)
 
 (use-package projectile
   :config
   (projectile-global-mode)
+  (setq projectile-enable-caching nil)
   (define-key global-map (kbd "<f7>") 'projectile-compile-project)
   (define-key global-map (kbd "<f5>") 'projectile-run-project)
-  (define-key global-map (kbd "<f6>") 'projectile-test-project))
+  (define-key global-map (kbd "<f6>") 'projectoile-test-project)
+  (define-key global-map (kbd "C-M-o") 'projectile-find-other-file))
 ;------------------------------------------------------------------------------
 ; Helm
 ;------------------------------------------------------------------------------
 (use-package helm)
 (use-package helm-ag)
+(custom-set-variables
+ '(helm-ag-base-command "ag --nocolor --nogroup --ignore-case")
+ '(helm-ag-command-option "--all-text")
+ '(helm-ag-insert-at-point 'word)
+ '(helm-ag-ignore-buffer-patterns '("\\.txt\\'" "\\.mkd\\'")))
+(add-hook 'c-mode-common-hook 'superword-mode)
+
 (use-package helm-projectile
   :config
   (helm-projectile-on)
@@ -114,7 +133,6 @@
 (use-package rainbow-delimiters
   :config
   (add-hook 'c-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'c++-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 ;------------------------------------------------------------------------------
 ; Tabs for documents - extremely handy
@@ -138,9 +156,9 @@
   (setq ido-enable-flex-matching t)
   (setq ido-use-faces nil))
 
-(use-package ido-completing-read+
-  :config
-  (ido-ubiquitous-mode 1))
+;;(use-package ido-completing-read+
+;;  :config
+;;  (ido-ubiquitous-mode 1))
 
 ;------------------------------------------------------------------------------
 ; Set highlight
@@ -157,8 +175,6 @@
 (use-package auto-highlight-symbol
   :config
   (global-auto-highlight-symbol-mode t)
-;;  (set-face-attribute 'ahs-plugin-default-face nil :background "#657b83")
-;;(set-face-attribute 'ahs-plugin-default-face nil :foreground "GhostWhite")
   (set-face-attribute 'ahs-face nil :background "#657b83")
   (set-face-attribute 'ahs-face nil :foreground "#eee8d5"))
 ;-----------------------------------------------------------------------------
@@ -181,24 +197,32 @@
   (setq company-backends (delete 'company-clang company-backends))
   (setq company-global-modes '(not gud-mode))
   (global-company-mode 1)
-  (setq company-idle-delay 0.0)
-  (let ((bg (face-attribute 'default :background)))
-    (custom-set-faces
-     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-     `(company-tooltip-common ((t (:inherit font-lock-constant-face)))))))
+  (setq company-idle-delay 0.0))
+
+(use-package rust-mode :ensure y)
+(use-package racer :ensure y)
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
 
 (use-package ws-butler
   :config
   (add-hook 'c-mode-common-hook 'ws-butler-mode))
 
 (setq custom-file "~/custom.el")
+(setq-default shell-file-name "/usr/bin/zsh")
 (load custom-file)
 
 (use-package realgud)
+(use-package lsp-mode)
+(use-package company-lsp
+  :config
+  (setq company-transformers nil company-lsp-async t company-lsp-cache-candidates nil)
+  (setq cquery-extra-init-params '(:completion (:detailedLabel t)))
+  (push 'company-lsp company-backends))
 
 (use-package nyatsenk-cpp :ensure f)
 (use-package nyatsenk-org :ensure f)
 (use-package nyatsenk-py  :ensure f)
+(server-start)
+;(use-package nyatsenk-last :ensure f)
