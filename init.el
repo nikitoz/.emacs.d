@@ -10,7 +10,7 @@
 ; Source code pro is adobe fonts
 ;------------------------------------------------------------------------------
 (set-default-font "Source Code Pro Medium")
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 120)
 ;------------------------------------------------------------------------------
 ; CUA mode sets ctrl-c/v and that kind of stuff
 ;------------------------------------------------------------------------------
@@ -224,5 +224,6 @@
 (use-package nyatsenk-cpp :ensure f)
 (use-package nyatsenk-org :ensure f)
 (use-package nyatsenk-py  :ensure f)
+(use-package nyatsenk-scala :ensure f)
 (server-start)
 ;(use-package nyatsenk-last :ensure f)
