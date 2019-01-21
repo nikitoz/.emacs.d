@@ -1,6 +1,6 @@
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/"))
+             '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (require 'use-package)
@@ -10,7 +10,7 @@
 ; Source code pro is adobe fonts
 ;------------------------------------------------------------------------------
 (set-default-font "Source Code Pro Medium")
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 110)
 ;------------------------------------------------------------------------------
 ; CUA mode sets ctrl-c/v and that kind of stuff
 ;------------------------------------------------------------------------------
@@ -88,7 +88,7 @@
     (lambda ()
     (setq indent-tabs-mode nil)
     (semantic-mode)))
-
+(semantic-mode 0)
 (use-package lua-mode)
 (use-package color-theme-sanityinc-tomorrow)
 (use-package solarized-theme)
@@ -199,8 +199,8 @@
   (global-company-mode 1)
   (setq company-idle-delay 0.0))
 
-(use-package rust-mode :ensure y)
-(use-package racer :ensure y)
+(use-package rust-mode)
+(use-package racer)
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'racer-mode-hook #'eldoc-mode)
 (add-hook 'racer-mode-hook #'company-mode)
@@ -214,8 +214,14 @@
 (load custom-file)
 
 (use-package realgud)
-(use-package lsp-mode)
+(use-package lsp-mode
+  :commands lsp
+  :init)
+
+(use-package lsp-ui :commands lsp-ui-mode)
+
 (use-package company-lsp
+  :commands company-lsp
   :config
   (setq company-transformers nil company-lsp-async t company-lsp-cache-candidates nil)
   (setq cquery-extra-init-params '(:completion (:detailedLabel t)))
