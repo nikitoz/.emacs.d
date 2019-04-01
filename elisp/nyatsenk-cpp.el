@@ -27,15 +27,10 @@
   :config
   (modern-c++-font-lock-global-mode t))
 
-(defun cquery//enable ()
-  (condition-case nil
-      (lsp-cquery-enable)
-    (user-error nil)))
-
 (use-package cquery
-  :commands lsp-cquery-enable
-  :init (add-hook 'c-mode-common-hook #'cquery//enable)
   :config
   (setq cquery-executable "/home/nyatsenk/hub/cquery/build/release/bin/cquery"))
 
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
 (provide 'nyatsenk-cpp)

@@ -9,7 +9,7 @@
 ;------------------------------------------------------------------------------
 ; Source code pro is adobe fonts
 ;------------------------------------------------------------------------------
-(set-default-font "Source Code Pro Medium")
+(set-default-font "M+ 1m")
 (set-face-attribute 'default nil :height 110)
 ;------------------------------------------------------------------------------
 ; CUA mode sets ctrl-c/v and that kind of stuff
@@ -51,9 +51,11 @@
 ; Emacs droppings will be copied to special folder
 ;------------------------------------------------------------------------------
 (setq backup-directory-alist
-`((".*" . ,temporary-file-directory)))
+  `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
-	  `((".*" ,temporary-file-directory t)))
+  `((".*" ,temporary-file-directory t)))
+
+(setq make-backup-files nil)
 ;------------------------------------------------------------------------------
 ; Some utility functions
 ;------------------------------------------------------------------------------
@@ -86,13 +88,13 @@
 
 (add-hook 'emacs-lisp-mode-hook
     (lambda ()
-    (setq indent-tabs-mode nil)
-    (semantic-mode)))
+    (setq indent-tabs-mode nil)))
 (semantic-mode 0)
 (use-package lua-mode)
 (use-package color-theme-sanityinc-tomorrow)
 (use-package solarized-theme)
 (use-package nord-theme)
+(use-package restart-emacs)
 ;------------------------------------------------------------------------------
 ; solarized
 ;------------------------------------------------------------------------------
@@ -214,11 +216,13 @@
 (load custom-file)
 
 (use-package realgud)
-(use-package lsp-mode
-  :commands lsp
-  :init)
 
-(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-mode
+  :commands lsp)
+
+(use-package lsp-ui :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-sideline-show-hover nil))
 
 (use-package company-lsp
   :commands company-lsp
